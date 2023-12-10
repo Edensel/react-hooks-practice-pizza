@@ -1,26 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Pizza from "./Pizza";
 
-function PizzaList() {
-  const [pizzas, setPizzas] = useState([]);
-
-  useEffect(() => {
-    // Fetch the data from the server when the component mounts
-    fetch("http://localhost:3001/pizzas")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setPizzas(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []); // Empty dependency array to fetch data only once on mount
-
+function PizzaList({ pizzas, onEditPizza, onDeletePizza }) {
   return (
     <table className="table table-striped">
       <thead>
@@ -28,12 +9,17 @@ function PizzaList() {
           <th scope="col">Topping</th>
           <th scope="col">Size</th>
           <th scope="col">Vegetarian?</th>
-          <th scope="col">Edit</th>
+          <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
         {pizzas.map((pizza) => (
-          <Pizza key={pizza.id} pizza={pizza} />
+          <Pizza
+            key={pizza.id}
+            pizza={pizza}
+            onEditPizza={onEditPizza}
+            onDeletePizza={onDeletePizza}
+          />
         ))}
       </tbody>
     </table>
